@@ -12,10 +12,10 @@ from firebase_admin import storage
 from firebase_admin import firestore
 
 from image_extension.core import start_process
-from .data import ImageProgress, to_dict, Status
+from data import ImageProgress, to_dict, Status
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
-firebase_key_path = os.path.join(script_directory, "firebase-service-key.json")
+firebase_key_path = os.path.join(script_directory, "../firebase-service-key.json")
 
 cred = credentials.Certificate(firebase_key_path)
 firebase_admin.initialize_app(cred, {
