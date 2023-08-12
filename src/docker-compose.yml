@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+    nginx:
+        container_name: webserver
+        image: nginx:alpine
+        depends_on:
+            - app
+        ports:
+            - "80:80"
+        volumes:
+            - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - nginx_network
+        
+    app:
+        container_name: roop-img2img-api
+        image: roop-img2img-api
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        expose:
+            - 7860
+        networks:
+            - nginx_network
+
+networks:
+    nginx_network:
+        driver: bridge
