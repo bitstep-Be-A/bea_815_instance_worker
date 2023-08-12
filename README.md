@@ -6,7 +6,7 @@ version: python 3.10.6
 
 필수 설치 사항
 
-``` console
+```console
 sudo apt-get -y update && \
 sudo apt-get install -y --no-install-recommends \
 build-essential \
@@ -16,6 +16,10 @@ ffmpeg \
 tk \
 && sudo apt-get clean \
 && sudo rm -rf /var/lib/apt/lists/*
+```
+
+```console
+pip3 install -r requirement.txt
 ```
 
 ## 실행 방법
