@@ -15,7 +15,7 @@ python3-dev \
 ffmpeg \
 tk \
 && sudo apt-get clean \
-&& rm -rf /var/lib/apt/lists/*
+&& sudo rm -rf /var/lib/apt/lists/*
 ```
 
 ## 실행 방법
