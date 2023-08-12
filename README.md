@@ -27,6 +27,5 @@ tk \
 3. 콘솔에 아래와 같이 입력하세요
 
 ```console
-./setup.sh
 ./start.sh
 ```
