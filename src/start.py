@@ -11,7 +11,7 @@ from firebase_admin import credentials
 from firebase_admin import storage
 from firebase_admin import firestore
 
-from src.image_extension.core import start_process
+from image_extension.core import start_process
 from .data import ImageProgress, to_dict, Status
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
