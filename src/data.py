@@ -8,6 +8,7 @@ class Status(Enum):
     ERROR = "error"
     SUCCESS = "success"
     DONE = "done"
+    SEND = "send"
 
 
 @dataclass

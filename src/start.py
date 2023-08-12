@@ -27,15 +27,30 @@ bucket = storage.bucket()
 
 
 def handle_message(message_body):
+    @firestore.transactional
+    def send_status_in_transaction(transaction, doc_ref):
+        snapshot = doc_ref.get(transaction=transaction)
+        status = snapshot.get('status')
+        if status != Status.SEND:
+            raise Exception()
+        transaction.update(doc_ref, {"status": Status.LOADING})
+
     payload = json.loads(message_body)
     _id = payload.pop('id')
+    doc_ref = db.collection("imageProgress").document(_id)
+
+    try:
+        transaction = db.transaction()
+        send_status_in_transaction(transaction, doc_ref)
+    except:
+        return
+
     base64img = start_process(**payload)
     image_data = base64.b64decode(base64img)
     blob = bucket.blob(f'/upload/{_id}.png')
     blob.upload_from_file(image_data)
     blob.make_public()
 
-    doc_ref = db.collection("imageProgress").document(_id)
     doc_ref.update(to_dict(ImageProgress(_id=_id, status=Status.SUCCESS, imageUrl=f'{_id}.png', worker=os.environ.get('WORKER_INSTANCE'))))
 
 
