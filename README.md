@@ -19,6 +19,8 @@ tk \
 ```
 
 ```console
+sudo pip3 install virtualenv
+virtualenv venv --python=python3.10.6
 pip3 install -r requirement.txt
 ```
 
