@@ -29,7 +29,7 @@ pip3 install -r requirement.txt
 ```console
 sudo cp worker.service /etc/systemd/system/worker.service
 sudo systemctl daemon-reload
-sudo systemctl enable mydaemon
+sudo systemctl enable worker
 ```
 
 1. 먼저 프로젝트 루트 디렉토리에 .env파일을 생성하고 전달 받은 .env 키, 값을 넣어주세요
