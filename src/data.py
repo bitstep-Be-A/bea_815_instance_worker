@@ -14,7 +14,7 @@ class Status(Enum):
 @dataclass
 class ImageProgress:
     _id: str
-    status: Status
+    status: str
     imageUrl: str
     worker: Optional[str] = None
 

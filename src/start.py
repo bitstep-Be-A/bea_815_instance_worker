@@ -31,9 +31,9 @@ def handle_message(message_body):
     def send_status_in_transaction(transaction, doc_ref):
         snapshot = doc_ref.get(transaction=transaction)
         status = snapshot.get('status')
-        if status != Status.SEND:
+        if status != Status.SEND.value:
             raise Exception()
-        transaction.update(doc_ref, {"status": Status.LOADING})
+        transaction.update(doc_ref, {"status": Status.LOADING.value})
 
     payload = json.loads(message_body)
     _id = payload.pop('id')
@@ -51,7 +51,7 @@ def handle_message(message_body):
     blob.upload_from_file(image_data)
     blob.make_public()
 
-    doc_ref.update(to_dict(ImageProgress(_id=_id, status=Status.SUCCESS, imageUrl=f'{_id}.png', worker=os.environ.get('WORKER_INSTANCE'))))
+    doc_ref.update(to_dict(ImageProgress(_id=_id, status=Status.SUCCESS.value, imageUrl=f'{_id}.png', worker=os.environ.get('WORKER_INSTANCE'))))
 
 
 def main():
