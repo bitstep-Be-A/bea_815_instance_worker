@@ -12,6 +12,7 @@ sudo apt-get install -y --no-install-recommends \
 build-essential \
 openssl libssl-dev \
 python3-dev \
+python3-pip \
 ffmpeg \
 tk \
 && sudo apt-get clean \
