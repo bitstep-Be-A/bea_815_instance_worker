@@ -6,4 +6,4 @@ if [[ -f .env ]]; then
   export $(cat .env | grep -v '^#' | xargs)
 fi
 
-python3 ./src/start.py
+sudo systemctl start worker
