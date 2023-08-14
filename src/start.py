@@ -27,6 +27,26 @@ db = firestore.client()
 bucket = storage.bucket()
 
 
+def get_full_error(exception):
+    import traceback
+
+    error_message = str(exception)
+    stack_trace = traceback.format_tb(exception.__traceback__)
+
+    full_error = f"Error: {error_message}\nStackTrace:\n"
+    for entry in stack_trace:
+        full_error += entry
+
+    return full_error
+
+
+def update_progress(status, ref, id):
+    if (status == Status.SUCCESS.value):
+        ref.update(to_dict(ImageProgress(_id=id, status=Status.SUCCESS.value, imageUrl=f'{id}.png', worker=os.environ.get('WORKER_INSTANCE'))))
+    if (status == Status.ERROR.value):
+        ref.update(to_dict(ImageProgress(_id=id, status=Status.ERROR.value, imageUrl=f'', worker=os.environ.get('WORKER_INSTANCE'))))
+
+
 def handle_message(message_body):
     @firestore.transactional
     def send_status_in_transaction(transaction, doc_ref):
@@ -43,20 +63,25 @@ def handle_message(message_body):
     try:
         transaction = db.transaction()
         send_status_in_transaction(transaction, doc_ref)
-    except:
-        return
+    except Exception as e:
+        update_progress(Status.ERROR.value, doc_ref, _id)
+        raise e
 
-    base64img = start_process(
-        base_image = image_to_base64(payload['base_image']),
-        roop_image = image_to_base64(payload['roop_image']),
-        face_index = payload['face_index']
-    )
-    image_data = base64.b64decode(base64img)
-    blob = bucket.blob(f'/upload/{_id}.png')
-    blob.upload_from_file(image_data)
-    blob.make_public()
+    try:
+        base64img = start_process(
+            base_image = image_to_base64(payload['base_image']),
+            roop_image = image_to_base64(payload['roop_image']),
+            face_index = payload['face_index']
+        )
+        image_data = base64.b64decode(base64img)
+        blob = bucket.blob(f'/upload/{_id}.png')
+        blob.upload_from_file(image_data)
+        blob.make_public()
 
-    doc_ref.update(to_dict(ImageProgress(_id=_id, status=Status.SUCCESS.value, imageUrl=f'{_id}.png', worker=os.environ.get('WORKER_INSTANCE'))))
+        update_progress(Status.SUCCESS.value, doc_ref, _id)
+    except Exception as e:
+        update_progress(Status.ERROR.value, doc_ref, _id)
+        raise e
 
 
 def main():
@@ -79,7 +104,7 @@ def main():
                 try:
                     handle_message(message['Body'])
                 except Exception as e:
-                    print(e)
+                    print(get_full_error(e))
                 sqs.delete_message(
                     QueueUrl=QUEUE_URL,
                     ReceiptHandle=message['ReceiptHandle']
