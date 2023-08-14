@@ -63,11 +63,7 @@ def handle_message(message_body):
     try:
         transaction = db.transaction()
         send_status_in_transaction(transaction, doc_ref)
-    except Exception as e:
-        update_progress(Status.ERROR.value, doc_ref, _id)
-        raise e
 
-    try:
         base64img = start_process(
             base_image = image_to_base64(payload['base_image']),
             roop_image = image_to_base64(payload['roop_image']),
@@ -75,7 +71,7 @@ def handle_message(message_body):
         )
         image_data = base64.b64decode(base64img)
         blob = bucket.blob(f'/upload/{_id}.png')
-        blob.upload_from_file(image_data)
+        blob.upload_from_string(image_data)
         blob.make_public()
 
         update_progress(Status.SUCCESS.value, doc_ref, _id)
