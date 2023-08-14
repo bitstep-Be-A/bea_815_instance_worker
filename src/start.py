@@ -12,6 +12,7 @@ from firebase_admin import storage
 from firebase_admin import firestore
 
 from image_extension.core import start_process
+from image_extension.utils import image_to_base64
 from data import ImageProgress, to_dict, Status
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -45,7 +46,8 @@ def handle_message(message_body):
     except:
         return
 
-    base64img = start_process(**payload)
+    get_encodes = lambda p: {k: image_to_base64(v) for k, v in p.items()}
+    base64img = start_process(**get_encodes(payload))
     image_data = base64.b64decode(base64img)
     blob = bucket.blob(f'/upload/{_id}.png')
     blob.upload_from_file(image_data)

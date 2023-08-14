@@ -36,14 +36,6 @@ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.9 1
 
 ## 실행 방법
 
-0. 단 한번만 실행해주세요
-
-```console
-sudo cp worker.service /etc/systemd/system/worker.service
-sudo systemctl daemon-reload
-sudo systemctl enable worker
-```
-
 1. 먼저 프로젝트 루트 디렉토리에 .env파일을 생성하고 전달 받은 .env 키, 값을 넣어주세요
 
 2. firebase service key 파일을 루트 디렉토리에 넣어줍니다.

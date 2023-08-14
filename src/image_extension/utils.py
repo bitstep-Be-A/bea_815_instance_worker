@@ -1,3 +1,4 @@
+import requests
 import base64
 import numpy as np
 import cv2
@@ -22,3 +23,13 @@ def get_buffer_image(base64img: str):
 
 def get_base64_from_buffer(buffer):
     return base64.b64encode(buffer).decode()
+
+
+def image_to_base64(image_url):
+    response = requests.get(image_url)
+    if response.status_code == 200:
+        image_data = response.content
+        base64_data = base64.b64encode(image_data).decode('utf-8')
+        return base64_data
+    else:
+        raise Exception(f"Failed to fetch image from URL: {image_url}")
