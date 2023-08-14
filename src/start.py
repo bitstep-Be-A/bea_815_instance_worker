@@ -72,8 +72,15 @@ def main():
             for message in messages['Messages']:
                 print("Get message")
                 print(message)
-                handle_message(message['Body'])
 
+                try:
+                    handle_message(message['Body'])
+                except Exception as e:
+                    sqs.delete_message(
+                        QueueUrl=QUEUE_URL,
+                        ReceiptHandle=message['ReceiptHandle']
+                    )
+                    raise e
                 sqs.delete_message(
                     QueueUrl=QUEUE_URL,
                     ReceiptHandle=message['ReceiptHandle']
