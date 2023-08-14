@@ -40,9 +40,9 @@ def get_full_error(exception):
     return full_error
 
 
-def update_progress(status, ref, id):
+def update_progress(status, ref, id, url=None):
     if (status == Status.SUCCESS.value):
-        ref.update(to_dict(ImageProgress(_id=id, status=Status.SUCCESS.value, imageUrl=f'{id}.png', worker=os.environ.get('WORKER_INSTANCE'))))
+        ref.update(to_dict(ImageProgress(_id=id, status=Status.SUCCESS.value, imageUrl=url, worker=os.environ.get('WORKER_INSTANCE'))))
     if (status == Status.ERROR.value):
         ref.update(to_dict(ImageProgress(_id=id, status=Status.ERROR.value, imageUrl=f'', worker=os.environ.get('WORKER_INSTANCE'))))
 
@@ -70,13 +70,12 @@ def handle_message(message_body):
             face_index = payload['face_index']
         )
         image_data = base64.b64decode(base64img)
-        print(image_data)
 
-        blob = bucket.blob(f'/upload/{_id}.jpg')
-        blob.upload_from_string(image_data, content_type="image/jpg")
+        blob = bucket.blob(f'upload/{_id}.jpg')
+        blob.upload_from_string(image_data, content_type="image/jpeg")
         blob.make_public()
 
-        update_progress(Status.SUCCESS.value, doc_ref, _id)
+        update_progress(Status.SUCCESS.value, doc_ref, _id, blob.public_url)
     except Exception as e:
         update_progress(Status.ERROR.value, doc_ref, _id)
         raise e
