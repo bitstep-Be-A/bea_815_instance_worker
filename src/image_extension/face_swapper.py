@@ -75,6 +75,8 @@ def process_frame(source_face: Face, reference_face: Face, temp_frame: Frame) ->
 
 def process_image(source_image: str, target_image: str):
     source_frame = cv2.imdecode(get_buffer_image(source_image), cv2.IMREAD_COLOR)
+    print("source frame-----------")
+    print(source_frame)
     source_face = get_one_face(source_frame)
 
     target_frame = cv2.imdecode(get_buffer_image(target_image), cv2.IMREAD_COLOR)
