@@ -3,6 +3,5 @@ Description=Worker Daemon
 After=network.target
 
 [Service]
-Environment=PROJECT_NAME=bea_815_instance_worker
-WorkingDirectory=${HOME}/${PROJECT_NAME}
-ExecStart=/bin/bash ${HOME}/${PROJECT_NAME}/start.sh
+WorkingDirectory=/home/ubuntu/bea_815_instance_worker
+ExecStart=/bin/bash /home/ubuntu/bea_815_instance_worker/start.sh

@@ -12,7 +12,6 @@ sudo apt-get install -y --no-install-recommends \
 build-essential \
 openssl libssl-dev \
 python3-dev \
-python3-pip \
 ffmpeg \
 tk \
 && sudo apt-get clean \
@@ -20,7 +19,19 @@ tk \
 ```
 
 ```console
-pip3 install -r requirements.txt
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python -
+pip install -r requirements.txt
+```
+
+## python 버전 변경
+
+``` console
+sudo apt-get -y update
+sudo apt-get install software-properties-common
+sudo apt-add-repository ppa:deadsnakes/ppa
+sudo apt-get -y update
+sudo apt-get install python3.9
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.9 1
 ```
 
 ## 실행 방법
