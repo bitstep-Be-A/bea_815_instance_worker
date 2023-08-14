@@ -5,3 +5,7 @@ After=network.target
 [Service]
 WorkingDirectory=/home/ubuntu/bea_815_instance_worker
 ExecStart=/bin/bash /home/ubuntu/bea_815_instance_worker/start.sh
+
+[Install]
+WantedBy=default.target
+RequiredBy=network.target
