@@ -70,8 +70,10 @@ def handle_message(message_body):
             face_index = payload['face_index']
         )
         image_data = base64.b64decode(base64img)
-        blob = bucket.blob(f'/upload/{_id}.png')
-        blob.upload_from_string(image_data)
+        print(image_data)
+
+        blob = bucket.blob(f'/upload/{_id}.jpg')
+        blob.upload_from_string(image_data, content_type="image/jpg")
         blob.make_public()
 
         update_progress(Status.SUCCESS.value, doc_ref, _id)

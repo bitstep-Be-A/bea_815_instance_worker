@@ -80,8 +80,6 @@ def enhance_face(target_face: Face, temp_frame: Frame) -> Frame:
 def process_frame(source_face: Face, reference_face: Face, temp_frame: Frame) -> Frame:
     many_faces = get_many_faces(temp_frame)
     if many_faces:
-        print("-----------------condition: many_faces----------------------")
-        print(many_faces)
         for target_face in many_faces:
             temp_frame = enhance_face(target_face, temp_frame)
     return temp_frame
@@ -89,10 +87,7 @@ def process_frame(source_face: Face, reference_face: Face, temp_frame: Frame) ->
 
 def process_image(source_image: str, target_image: str):
     target_frame = cv2.imdecode(get_buffer_image(target_image), cv2.IMREAD_COLOR)
-    print("---------------target frame----------------------")
-    print(target_frame)
     result = process_frame(None, None, target_frame)
     _, buffer = cv2.imencode('.jpg', result)
-    print("----------------------buffer-----------------------")
-    print(buffer)
+
     return get_base64_from_buffer(buffer)
