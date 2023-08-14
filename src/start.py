@@ -46,8 +46,11 @@ def handle_message(message_body):
     except:
         return
 
-    get_encodes = lambda p: {k: image_to_base64(v) for k, v in p.items()}
-    base64img = start_process(**get_encodes(payload))
+    base64img = start_process({
+        "base_image": image_to_base64(payload['base_image']),
+        "roop_image": image_to_base64(payload['roop_image']),
+        "face_index": payload['face_index']
+    })
     image_data = base64.b64decode(base64img)
     blob = bucket.blob(f'/upload/{_id}.png')
     blob.upload_from_file(image_data)
